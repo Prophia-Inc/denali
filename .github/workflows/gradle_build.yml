@@ -1,0 +1,49 @@
+name: Gradle Build
+
+on:
+  workflow_call:
+    inputs:
+      build_artifact:
+        required: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch_name }}
+      - name: Java Cache
+        id: java-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ runner.temp }}/java_package.tar.gz
+          key: java_package.tar.gz
+      - name: Download Java
+        if: steps.java-cache.outputs.cache-hit != 'true'
+        run: |
+          download_url="https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz"
+          wget -O ${{ runner.temp }}/java_package.tar.gz $download_url
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/java_package.tar.gz
+          java-version: '11.0.0'
+          architecture: x64
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Build/Test
+        run: ./gradlew test
+      - name: Build Artifact
+        if: inputs.build_artifact
+        run: ./gradlew buildZip
+      - name: Upload Artifact
+        if: inputs.build_artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: build/distributions/*.zip
