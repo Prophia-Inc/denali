@@ -12,6 +12,9 @@ on:
       token:
         required: true
         type: string
+    secrets:
+      PAT:
+        required: true
 
 permissions:
   contents: write
@@ -36,7 +39,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ inputs.token }}
+          token: ${{ secrets.PAT }}
           branch-suffix: short-commit-hash
           title: Bump ${{ inputs.part }} version
       - name: Approve Pull Request
