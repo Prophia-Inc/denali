@@ -33,7 +33,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           branch-suffix: short-commit-hash
           title: Bump ${{ inputs.part }} version
       - name: Approve Pull Request
