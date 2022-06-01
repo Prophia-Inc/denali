@@ -28,8 +28,16 @@ jobs:
           cache: 'pip'
       - run: pip install bump2version
       - run: bump2version --list ${{ inputs.part }}
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+      - name: Approve Pull Request
+        uses: juliangruber/approve-pull-request-action@v1.1.1
         with:
-          commit_message: Bump version
-          branch: ${{ inputs.branch_name }}
-          skip_checkout: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
+      - name: Merge Pull Request
+        uses: juliangruber/merge-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
