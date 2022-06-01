@@ -9,6 +9,9 @@ on:
       branch_name:
         required: true
         type: string
+      token:
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -33,7 +36,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ inputs.token }}
           branch-suffix: short-commit-hash
           title: Bump ${{ inputs.part }} version
       - name: Approve Pull Request
