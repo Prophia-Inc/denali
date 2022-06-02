@@ -9,6 +9,9 @@ on:
       branch_name:
         required: true
         type: string
+    secrets:
+      PAT:
+        required: true
 
 permissions:
   contents: write
