@@ -39,4 +39,5 @@ jobs:
           cache: 'pip'
       - run: pip install bump2version
       - run: bump2version --list ${{ inputs.part }}
+      - run: git push origin
 
