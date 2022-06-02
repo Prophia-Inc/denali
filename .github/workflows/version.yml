@@ -43,5 +43,7 @@ jobs:
           cache: 'pip'
       - run: pip install bump2version
       - run: bump2version --verbose --commit --tag --list ${{ inputs.part }}
-      - run: git push origin --tags
+      - run: |
+          git push origin
+          git push origin --tags
 
