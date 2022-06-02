@@ -44,7 +44,7 @@ jobs:
           TOKEN: ${{ secrets.PAT }}
           NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          curl -s -H "Authorization: token $TOKEN" -X POST -d '{"event":"APPROVE"}' "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$NUMBER/reviews"
+          curl -s -H "Authorization: token ${{ env.TOKEN }}" -X POST -d '{"event":"APPROVE"}' "https://api.github.com/repos/$${{ env.GITHUB_REPOSITORY }}/pulls/$$ {{ env.NUMBER }}/reviews"
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
