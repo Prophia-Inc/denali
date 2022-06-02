@@ -43,7 +43,6 @@ jobs:
         with:
           commit_message: Bump version
           branch: ${{ inputs.branch_name }}
-          skip_checkout: true
           token: ${{ secrets.actions-token }}
           repository: ${{ github.repository }}
 
