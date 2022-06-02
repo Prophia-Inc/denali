@@ -31,6 +31,10 @@ jobs:
         with:
           ref: ${{ inputs.branch_name }}
           token: ${{ secrets.actions-token }}
+      - name: Setup git user
+        run: |
+          git config --global user.name "prophia-bot"
+          git config --global user.email "prophia-bot@users.noreply.github.com"
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
