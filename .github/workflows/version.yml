@@ -40,10 +40,11 @@ jobs:
           branch-suffix: short-commit-hash
           title: Bump ${{ inputs.part }} version
       - name: Approve Pull Request
-        uses: juliangruber/approve-pull-request-action@v1.1.1
-        with:
-          github-token: ${{ secrets.PAT }}
-          number: ${{ steps.cpr.outputs.pull-request-number }}
+        env:
+          TOKEN: ${{ secrets.PAT }}
+          NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          curl -s -H "Authorization: token $TOKEN" -X POST -d '{"event":"APPROVE"}' "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$NUMBER/reviews"
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
