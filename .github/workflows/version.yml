@@ -44,7 +44,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.cpr.outputs.pull-request-number }}/reviews \
-          --header 'authorization: Bearer ${{ env.PAT }}' \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --fail
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
