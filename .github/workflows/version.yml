@@ -10,7 +10,7 @@ on:
         required: true
         type: string
     secrets:
-      PAT:
+      actions-token:
         required: true
 
 permissions:
@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch_name }}
+          token: ${{ secrets.actions-token }}
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
@@ -32,23 +33,10 @@ jobs:
           cache: 'pip'
       - run: pip install bump2version
       - run: bump2version --list ${{ inputs.part }}
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch-suffix: short-commit-hash
-          title: Bump ${{ inputs.part }} version
-      - name: Approve Pull Request
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.cpr.outputs.pull-request-number }}/reviews \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{"event":"APPROVE"}' \
-          --verbose
-      - name: Merge Pull Request
-        uses: juliangruber/merge-pull-request-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ steps.cpr.outputs.pull-request-number }}
+  - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Bump version
+        branch: ${{ inputs.branch_name }}
+        skip_checkout: true
+        token: ${{ secrets.actions-token }}
+
