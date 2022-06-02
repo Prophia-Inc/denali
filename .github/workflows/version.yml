@@ -38,6 +38,6 @@ jobs:
           architecture: 'x64'
           cache: 'pip'
       - run: pip install bump2version
-      - run: bump2version --list ${{ inputs.part }}
+      - run: bump2version --verbose --commit --list ${{ inputs.part }}
       - run: git push origin
 
