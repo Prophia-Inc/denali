@@ -1,5 +1,6 @@
 name: Version
 
+env: ${{ secrets }}
 on:
   workflow_call:
     inputs:
@@ -12,7 +13,6 @@ on:
     secrets:
       PAT:
         required: true
-    env: ${{ secrets }}
 
 permissions:
   contents: write
