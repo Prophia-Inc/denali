@@ -46,7 +46,7 @@ jobs:
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{"event":"APPROVE"}' \
-          --fail
+          --verbose
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
