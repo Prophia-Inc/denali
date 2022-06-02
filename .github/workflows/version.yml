@@ -21,6 +21,12 @@ jobs:
   bump_version:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          if [[ "${{secrets.actions-token}}" == "" ]]; then
+            echo The secret does not exist
+          else
+            echo The secret exists
+          fi
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch_name }}
