@@ -39,4 +39,5 @@ jobs:
           branch: ${{ inputs.branch_name }}
           skip_checkout: true
           token: ${{ secrets.actions-token }}
+          repository: ${{ github.repository }}
 
