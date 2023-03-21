@@ -49,8 +49,8 @@ jobs:
         run: sed -i \"s/$(cat .version)/${updated_version}/g\" ./.version
       - name: Git commit and tag
         run: |
-          git commit -am"Bump version $previous_version -> $npm_package_version"
-          git tag -a v${updated_version} -m"Bump version $previous_version -> $npm_package_version"
+          git commit -am"Bump version $previous_version -> $updated_version"
+          git tag -a v${updated_version} -m"Bump version $previous_version -> $updated_version"
       - name: Push branch and tag
         run: |
           git show --summary
