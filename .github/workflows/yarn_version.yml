@@ -10,10 +10,20 @@ on:
       actions-token:
         required: true
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   yarn_version:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          if [[ "${{secrets.actions-token}}" == "" ]]; then
+            echo The secret does not exist
+          else
+            echo The secret exists
+          fi
       - uses: actions/checkout@v3
         with:
           ref: develop
