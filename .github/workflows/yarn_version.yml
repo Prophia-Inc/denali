@@ -39,8 +39,20 @@ jobs:
           cache: 'npm'
       - run: npm install yarn -g
       - run: yarn install
-      - run: yarn save-previous-version
-      - run: yarn version --${{ inputs.part }} --no-git-tag-version
-      - run: |
+      - name: Save previous version to env
+        run: yarn save-previous-version
+      - name: Update package.json
+        run: yarn version --${{ inputs.part }} --no-git-tag-version
+      - name: Save updated version to env
+        run: yarn save-updated-version
+      - name: Update .version file
+        run: sed -i \"s/$(cat .version)/${updated_version}/g\" ./.version
+      - name: Git commit and tag
+        run: |
+          git commit -am"Bump version $previous_version -> $updated_version"
+          git tag -a v${updated_version} -m"Bump version $previous_version -> $updated_version"
+      - name: Push branch and tag
+        run: |
+          git show --summary
           git push origin
           git push origin --tags
