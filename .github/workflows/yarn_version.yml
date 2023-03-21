@@ -1,0 +1,36 @@
+name: Yarn Version
+
+on:
+  workflow_call:
+    inputs:
+      part:
+        required: true
+        type: string
+    secrets:
+      actions-token:
+        required: true
+
+jobs:
+  yarn_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: develop
+          token: ${{ secrets.actions-token }}
+      - name: Setup git user
+        run: |
+          git config --global user.name "prophia-bot"
+          git config --global user.email "prophia-bot@users.noreply.github.com"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 12
+          cache: 'npm'
+      - run: npm install yarn -g
+      - run: yarn install
+      - run: yarn save-previous-version
+      - run: yarn version --${{ inputs.part }} --no-git-tag-version
+      - run: |
+          git push origin
+          git push origin --tags
