@@ -46,7 +46,7 @@ jobs:
       - name: Save updated version to env
         run: yarn save-updated-version
       - name: Update .version file
-        run: sed -i "s/$(cat .version)/${updated_version}/g\" ./.version
+        run: sed -i "s/$(cat .version)/${updated_version}/g" ./.version
       - name: Git commit and tag
         run: |
           git commit -am"Bump version $previous_version -> $updated_version"
