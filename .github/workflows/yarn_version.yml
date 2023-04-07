@@ -6,6 +6,9 @@ on:
       part:
         required: true
         type: string
+      branch_name:
+        required: true
+        type: string
     secrets:
       actions-token:
         required: true
@@ -26,13 +29,12 @@ jobs:
           fi
       - uses: actions/checkout@v3
         with:
-          ref: develop
+          ref: ${{ inputs.branch_name }}
           token: ${{ secrets.actions-token }}
       - name: Setup git user
         run: |
           git config --global user.name "prophia-bot"
           git config --global user.email "prophia-bot@users.noreply.github.com"
-      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 12
