@@ -12,21 +12,9 @@ on:
     secrets:
       actions-token:
         required: true
-  workflow_dispatch:
-    inputs:
-      source_branch_name:
-        required: true
-        type: string
-      target_branch_name:
-        required: true
-        type: string
-    secrets:
-      actions-token:
-        required: true
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   merge_branches:
     runs-on: ubuntu-latest
