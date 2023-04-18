@@ -1,0 +1,6 @@
+{
+  "inputs": {
+    "target_branch_name": "feature/LEAS-6884",
+    "source_branch_name": "main"
+  }
+}

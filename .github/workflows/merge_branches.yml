@@ -1,0 +1,53 @@
+name: Merge Branches
+
+on:
+  workflow_call:
+    inputs:
+      source_branch_name:
+        required: true
+        type: string
+        defaut: main
+      target_branch_name:
+        required: true
+        type: string
+        default: feature/LEAS-6884
+    secrets:
+      actions-token:
+        required: true
+  workflow_dispatch:
+    inputs:
+      source_branch_name:
+        required: true
+        type: string
+      target_branch_name:
+        required: true
+        type: string
+    secrets:
+      actions-token:
+        required: true
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge_branches:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "target_branch = ${{ inputs.target_branch_name }}"
+      - run: echo "source_branch = ${{ inputs.source_branch_name }}"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.target_branch_name }}
+          token: ${{ secrets.actions-token }}
+          fetch-depth: 0
+      - name: Setup git user
+        run: |
+          git config --global user.name "prophia-bot"
+          git config --global user.email "prophia-bot@users.noreply.github.com"
+      - run: git status
+      - run: git pull --no-commit --no-ff origin ${{ inputs.source_branch_name }}
+      - run: git commit -m "Merging ${{ inputs.source_branch_name }}"
+      - run: git push origin ${{ inputs.target_branch_name }}
+
+
