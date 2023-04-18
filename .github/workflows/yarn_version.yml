@@ -9,6 +9,10 @@ on:
       branch_name:
         required: true
         type: string
+      node_version:
+        required: true
+        type: number
+        default: 14
     secrets:
       actions-token:
         required: true
@@ -37,7 +41,7 @@ jobs:
           git config --global user.email "prophia-bot@users.noreply.github.com"
       - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: ${{ inputs.node_version }}
           cache: 'npm'
       - run: npm install yarn -g
       - run: yarn install
