@@ -15,17 +15,6 @@ on:
     secrets:
       aws_role:
         required: true
-  workflow_dispatch:
-    inputs:
-      image_name:
-        required: true
-        type: string
-      aws_region:
-        required: true
-        type: string
-      ecr_base_uri:
-        required: true
-        type: string
 
 jobs:
   push_to_ecr:
@@ -34,8 +23,6 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: Build Image
-        run: docker pull "${{ inputs.image_name }}"
       - name: Install AWS CLI
         id: install-aws-cli
         uses: unfor19/install-aws-cli-action@v1
