@@ -1,0 +1,52 @@
+name: Push_Container
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      aws_region:
+        required: true
+        type: string
+      ecr_base_uri:
+        required: true
+        type: string
+    secrets:
+      aws_role:
+        required: true
+  workflow_dispatch:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      aws_region:
+        required: true
+        type: string
+      ecr_base_uri:
+        required: true
+        type: string
+
+jobs:
+  push_to_ecr:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Build Image
+        run: docker pull "${{ inputs.image_name }}"
+      - name: Install AWS CLI
+        id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.aws_role }}
+          aws-region: ${{ inputs.aws_region }}
+      - name: Docker Login
+        run: aws ecr get-login-password --region "${{ inputs.aws_region }}" | docker login --username AWS --password-stdin "${{ inputs.ecr_base_uri }}"
+      - run: |
+          docker tag "${{ inputs.image_name }}" "${{ inputs.ecr_base_uri }}/${{ inputs.image_name }}"
+          docker push "${{ inputs.ecr_base_uri }}/${{ inputs.image_name }}"
+
